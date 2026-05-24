@@ -52,7 +52,7 @@ export default function TopBar() {
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 px-6 backdrop-blur shadow-sm">
       <button 
         onClick={toggleSidebar}
-        className="text-muted-foreground hover:text-foreground transition hidden md:block"
+        className="text-muted-foreground hover:text-foreground transition block"
       >
         <Menu className="w-5 h-5" />
       </button>

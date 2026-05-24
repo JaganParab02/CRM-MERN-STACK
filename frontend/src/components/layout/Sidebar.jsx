@@ -12,7 +12,7 @@ import { useStore } from '../../store/useStore';
 import { cn } from '../../lib/utils';
 
 export default function Sidebar() {
-  const { isSidebarOpen, user } = useStore();
+  const { isSidebarOpen, user, toggleSidebar } = useStore();
   const location = useLocation();
 
   const handleLogout = () => {
@@ -34,14 +34,25 @@ export default function Sidebar() {
   const filteredNav = navItems.filter(item => !item.adminOnly || user?.role === 'admin');
 
   return (
-    <motion.aside
-      initial={false}
-      animate={{ 
-        width: isSidebarOpen ? '260px' : '80px',
-        transition: { duration: 0.3, ease: 'easeInOut' }
-      }}
-      className="fixed left-0 top-0 z-40 h-screen border-r bg-card flex flex-col hidden md:flex"
-    >
+    <>
+      {/* Mobile backdrop */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+      <motion.aside
+        initial={false}
+        animate={{ 
+          width: isSidebarOpen ? '260px' : '80px',
+          transition: { duration: 0.3, ease: 'easeInOut' }
+        }}
+        className={cn(
+          "fixed left-0 top-0 z-50 h-screen border-r bg-card flex flex-col transition-transform md:translate-x-0",
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
       <div className="h-16 flex items-center justify-center border-b border-border">
         <div className="flex items-center gap-2 overflow-hidden px-4">
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
@@ -97,6 +108,7 @@ export default function Sidebar() {
           {isSidebarOpen && <span className="font-medium whitespace-nowrap">Logout</span>}
         </button>
       </div>
-    </motion.aside>
+      </motion.aside>
+    </>
   );
 }
